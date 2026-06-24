@@ -291,3 +291,143 @@ body.mux-noscroll { overflow: hidden; }
 	}
 	html { scroll-behavior: auto !important; }
 }
+
+/* ============================================================ *
+ * v0.2 – Visual uplift (cards, buttons, last-post action, typo)
+ *   Restyle only; anchored to the Prosilver Dark palette.
+ * ============================================================ */
+
+/* --- Category blocks as cards --- */
+.forabg,
+.forumbg {
+	border: 1px solid var(--mux-line);
+	border-radius: var(--mux-radius);
+	overflow: hidden;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.30);
+	margin-bottom: 22px;
+}
+
+/* Category header bar (ALLGEMEIN …): crimson left edge + tighter caps */
+ul.topiclist li.header {
+	box-shadow: inset 3px 0 0 var(--mux-accent);
+}
+ul.topiclist li.header dt .list-inner,
+ul.topiclist li.header dd {
+	text-transform: uppercase;
+	font-weight: 600;
+	letter-spacing: .05em;
+}
+
+/* Rows: hover lift + left accent + thin dividers */
+ul.topiclist li.row {
+	transition: background var(--mux-ease), box-shadow var(--mux-ease);
+	border-bottom: 1px solid var(--mux-line);
+}
+ul.topiclist li.row:last-child { border-bottom: 0; }
+ul.topiclist li.row:hover {
+	background: rgba(255, 255, 255, 0.04);
+	box-shadow: inset 3px 0 0 var(--mux-accent);
+}
+.row-item .list-inner { padding-top: 12px; padding-bottom: 12px; }
+
+/* Titles a touch larger/clearer, accent on hover */
+a.forumtitle,
+a.topictitle { font-size: 1.12em; font-weight: 600; }
+a.forumtitle:hover,
+a.topictitle:hover { color: var(--mux-accent); }
+
+/* Counts: muted + tabular numerals */
+dl.row-item dd.posts,
+dl.row-item dd.topics {
+	color: var(--mux-muted);
+	font-variant-numeric: tabular-nums;
+}
+
+/* Forum icon polish (don't replace the sprite, just animate) */
+.forum-image { transition: transform var(--mux-ease); }
+li.row:hover .forum-image { transform: scale(1.06); }
+
+/* --- "Jump to last post": bigger, rounder accent action --- */
+dd.lastpost a .icon.fa-external-link-square {
+	font-size: 1.25em;
+	color: var(--mux-accent) !important;
+}
+dd.lastpost a:has(> .fa-external-link-square) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: var(--mux-surface);
+	border: 1px solid var(--mux-line);
+	vertical-align: middle;
+	transition: background var(--mux-ease), transform var(--mux-ease);
+}
+dd.lastpost a:has(> .fa-external-link-square):hover {
+	background: var(--mux-accent);
+	transform: translateY(-1px);
+}
+dd.lastpost a:has(> .fa-external-link-square):hover .icon.fa-external-link-square {
+	color: #fff !important;
+}
+
+/* --- Buttons as modern pills --- */
+.button,
+a.button, a.button1, a.button2,
+input.button1, input.button2, input.button3,
+.button-search, .button-search-end {
+	border-radius: 8px !important;
+	transition: background var(--mux-ease), border-color var(--mux-ease),
+		transform var(--mux-ease), box-shadow var(--mux-ease);
+}
+.button:hover,
+a.button:hover, a.button1:hover, a.button2:hover,
+input.button1:hover, input.button2:hover { transform: translateY(-1px); }
+
+/* Primary actions = accent fill */
+a.button1, input.button1,
+button.button-search, .button-search {
+	background: var(--mux-accent) !important;
+	border-color: var(--mux-accent) !important;
+	color: #fff !important;
+}
+a.button1:hover, input.button1:hover,
+button.button-search:hover, .button-search:hover {
+	background: var(--mux-accent2) !important;
+	border-color: var(--mux-accent2) !important;
+}
+/* Secondary = surface + accent edge on hover */
+a.button2:hover, input.button2:hover { border-color: var(--mux-accent) !important; color: #fff !important; }
+
+/* Header search field: rounded ends */
+#search-box .inputbox { border-radius: 8px 0 0 8px; }
+#search-box .button-search { border-radius: 0 !important; }
+#search-box .button-search-end { border-radius: 0 8px 8px 0 !important; }
+
+/* --- Navbar polish: brand accent line + hover pills --- */
+.navbar { border-top: 2px solid var(--mux-accent); }
+#nav-main > li > a,
+ul.linklist > li > a {
+	border-radius: 6px;
+	transition: background var(--mux-ease), color var(--mux-ease);
+}
+#nav-main > li > a:hover,
+ul.linklist > li > a:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+
+/* --- viewtopic: posts as cards --- */
+.post {
+	border: 1px solid var(--mux-line);
+	border-radius: var(--mux-radius);
+	margin-bottom: 16px;
+	overflow: hidden;
+}
+.pagination li a { border-radius: 6px !important; }
+
+@media (prefers-reduced-motion: reduce) {
+	ul.topiclist li.row, .forum-image, .button, a.button, a.button1, a.button2,
+	input.button1, input.button2, dd.lastpost a, #nav-main > li > a, ul.linklist > li > a {
+		transition: none !important;
+	}
+	li.row:hover .forum-image { transform: none; }
+}

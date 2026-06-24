@@ -223,10 +223,25 @@
 		});
 	}
 
+	/* ---------------------------------------------------------- *
+	 * 5. Footer: replace the third-party style credit with ours
+	 *    (phpBB's own "Powered by phpBB" credit is left intact)
+	 * ---------------------------------------------------------- */
+	function initFooterCredit() {
+		var rows = document.querySelectorAll('.copyright .footer-row, .copyright p');
+		for (var i = 0; i < rows.length; i++) {
+			if (/planetstyles|prosilver dark edition|premium phpbb styles/i.test(rows[i].textContent)) {
+				rows[i].innerHTML = 'Oberfläche: <a href="https://github.com/dbt1/modernux-style" rel="noopener">ModernUX</a> · angelehnt an Prosilver Dark';
+				break;
+			}
+		}
+	}
+
 	ready(function () {
 		try { initStickyHeader(); } catch (e) {}
 		try { initDrawer(); } catch (e) {}
 		try { initQuickSearch(); } catch (e) {}
 		try { initScrollAids(); } catch (e) {}
+		try { initFooterCredit(); } catch (e) {}
 	});
 })();
