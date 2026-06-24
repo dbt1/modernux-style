@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "ModernUX – moderne, intuitive Navigation als Overlay für phpBB. Sticky/Shrink-Header, mobiler Off-Canvas-Drawer, Quick-Search-Overlay (Strg/⌘-K), Scroll-to-Top und Lesefortschritt. Behält die Akzentfarben des aktiven Styles (gebaut für Prosilver Dark Edition).",
 	"homepage": "https://github.com/dbt1/modernux-style",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"license": "GPL-2.0-only",
 	"authors": [
 		{

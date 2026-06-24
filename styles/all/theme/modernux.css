@@ -17,7 +17,14 @@
 	--mux-muted:   #838b98;   /* muted text */
 	--mux-line:    rgba(255, 255, 255, 0.10);
 	--mux-shadow:  0 6px 24px rgba(0, 0, 0, 0.45);
-	--mux-radius:  10px;
+	--mux-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.30);
+	--mux-radius:    10px;
+	--mux-radius-md: 8px;
+	--mux-radius-sm: 6px;
+	--mux-space:    16px;
+	--mux-space-lg: 24px;
+	--mux-hover:        rgba(255, 255, 255, 0.06);
+	--mux-hover-strong: rgba(255, 255, 255, 0.09);
 	--mux-z-nav:        40;
 	--mux-z-totop:     900;
 	--mux-z-progress: 1200;
@@ -293,8 +300,8 @@ body.mux-noscroll { overflow: hidden; }
 }
 
 /* ============================================================ *
- * v0.2 – Visual uplift (cards, buttons, last-post action, typo)
- *   Restyle only; anchored to the Prosilver Dark palette.
+ * v0.3 – Visual uplift + polish (cards, typo, unread accent,
+ *   focus). Restyle only; anchored to the Prosilver Dark palette.
  * ============================================================ */
 
 /* --- Category blocks as cards --- */
@@ -303,36 +310,46 @@ body.mux-noscroll { overflow: hidden; }
 	border: 1px solid var(--mux-line);
 	border-radius: var(--mux-radius);
 	overflow: hidden;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.30);
-	margin-bottom: 22px;
+	box-shadow: var(--mux-shadow-sm);
+	margin-bottom: var(--mux-space-lg);
 }
 
-/* Category header bar (ALLGEMEIN …): crimson left edge + tighter caps */
+/* Category header bar (ALLGEMEIN …): crimson left edge + refined caps */
 ul.topiclist li.header {
-	box-shadow: inset 3px 0 0 var(--mux-accent);
+	box-shadow: inset 4px 0 0 var(--mux-accent);
 }
+ul.topiclist li.header dt .list-inner { padding-left: 14px; }
 ul.topiclist li.header dt .list-inner,
 ul.topiclist li.header dd {
 	text-transform: uppercase;
 	font-weight: 600;
-	letter-spacing: .05em;
+	font-size: .82em;
+	letter-spacing: .06em;
 }
 
-/* Rows: hover lift + left accent + thin dividers */
+/* Rows: subtle hover + left accent + thin dividers */
 ul.topiclist li.row {
 	transition: background var(--mux-ease), box-shadow var(--mux-ease);
 	border-bottom: 1px solid var(--mux-line);
 }
 ul.topiclist li.row:last-child { border-bottom: 0; }
 ul.topiclist li.row:hover {
-	background: rgba(255, 255, 255, 0.04);
+	background: var(--mux-hover);
 	box-shadow: inset 3px 0 0 var(--mux-accent);
 }
-.row-item .list-inner { padding-top: 12px; padding-bottom: 12px; }
+.row-item .list-inner { padding-top: 14px; padding-bottom: 14px; }
+
+/* Unread forums/topics: crimson row accent (sprite .gif left untouched) */
+ul.topiclist li.row dl.row-item[class*="unread"] {
+	box-shadow: inset 4px 0 0 var(--mux-accent);
+}
+/* The one recolourable blue glyph (subforum link icon) -> accent */
+.topiclist .icon.icon-blue,
+dl.row-item .icon.icon-blue { color: var(--mux-accent) !important; }
 
 /* Titles a touch larger/clearer, accent on hover */
 a.forumtitle,
-a.topictitle { font-size: 1.12em; font-weight: 600; }
+a.topictitle { font-size: 1.1em; font-weight: 600; line-height: 1.35; }
 a.forumtitle:hover,
 a.topictitle:hover { color: var(--mux-accent); }
 
@@ -343,11 +360,15 @@ dl.row-item dd.topics {
 	font-variant-numeric: tabular-nums;
 }
 
-/* Forum icon polish (don't replace the sprite, just animate) */
-.forum-image { transition: transform var(--mux-ease); }
-li.row:hover .forum-image { transform: scale(1.06); }
+/* Last-post block: muted meta, stronger subject (scan hierarchy) */
+dd.lastpost { font-size: .85em; line-height: 1.4; }
+dd.lastpost a.lastsubject { color: var(--mux-text); font-weight: 500; }
 
-/* --- "Jump to last post": bigger, rounder accent action --- */
+/* Forum icon polish (don't replace the sprite, just animate gently) */
+.forum-image { transition: transform var(--mux-ease); }
+li.row:hover .forum-image { transform: scale(1.03); }
+
+/* --- "Jump to last post": bigger accent icon (baseline) + round pill (:has) --- */
 dd.lastpost a .icon.fa-external-link-square {
 	font-size: 1.25em;
 	color: var(--mux-accent) !important;
@@ -377,7 +398,7 @@ dd.lastpost a:has(> .fa-external-link-square):hover .icon.fa-external-link-squar
 a.button, a.button1, a.button2,
 input.button1, input.button2, input.button3,
 .button-search, .button-search-end {
-	border-radius: 8px !important;
+	border-radius: var(--mux-radius-md) !important;
 	transition: background var(--mux-ease), border-color var(--mux-ease),
 		transform var(--mux-ease), box-shadow var(--mux-ease);
 }
@@ -400,29 +421,59 @@ button.button-search:hover, .button-search:hover {
 /* Secondary = surface + accent edge on hover */
 a.button2:hover, input.button2:hover { border-color: var(--mux-accent) !important; color: #fff !important; }
 
-/* Header search field: rounded ends */
-#search-box .inputbox { border-radius: 8px 0 0 8px; }
+/* Header search field: rounded ends + scoped focus ring (mirrors Ctrl-K) */
+#search-box .inputbox { border-radius: var(--mux-radius-md) 0 0 var(--mux-radius-md); }
 #search-box .button-search { border-radius: 0 !important; }
-#search-box .button-search-end { border-radius: 0 8px 8px 0 !important; }
+#search-box .button-search-end { border-radius: 0 var(--mux-radius-md) var(--mux-radius-md) 0 !important; }
+#search-box .inputbox:focus {
+	outline: none;
+	border-color: var(--mux-accent);
+	box-shadow: 0 0 0 2px rgba(211, 17, 65, 0.30);
+}
 
 /* --- Navbar polish: brand accent line + hover pills --- */
 .navbar { border-top: 2px solid var(--mux-accent); }
 #nav-main > li > a,
 ul.linklist > li > a {
-	border-radius: 6px;
+	border-radius: var(--mux-radius-sm);
 	transition: background var(--mux-ease), color var(--mux-ease);
 }
 #nav-main > li > a:hover,
-ul.linklist > li > a:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+ul.linklist > li > a:hover { background: var(--mux-hover); color: #fff; }
 
-/* --- viewtopic: posts as cards --- */
+/* --- viewtopic: posts as cards (overflow visible: don't clip code/quotes) --- */
 .post {
 	border: 1px solid var(--mux-line);
 	border-radius: var(--mux-radius);
-	margin-bottom: 16px;
-	overflow: hidden;
+	margin-bottom: var(--mux-space);
+	overflow: visible;
 }
-.pagination li a { border-radius: 6px !important; }
+.pagination li a { border-radius: var(--mux-radius-sm) !important; }
+
+/* --- Drawer: mark the current page (parity with desktop nav) --- */
+.mux-drawer a.mux-active {
+	color: #fff;
+	border-left-color: var(--mux-accent);
+	background: var(--mux-hover);
+}
+
+/* --- Visible keyboard focus for injected controls (WCAG 2.4.7) --- */
+.mux-burger:focus-visible,
+.mux-drawer-close:focus-visible,
+.mux-drawer a:focus-visible,
+.mux-totop:focus-visible,
+.mux-search-card button:focus-visible,
+.mux-search-card input[type="search"]:focus-visible {
+	outline: 2px solid var(--mux-accent);
+	outline-offset: 2px;
+}
+
+/* --- Small depth cues (modern, cheap, gated) --- */
+@supports (backdrop-filter: blur(2px)) {
+	.mux-search { backdrop-filter: blur(2px); }
+	.mux-backdrop { backdrop-filter: blur(1px); }
+}
+.mux-totop { border-color: rgba(211, 17, 65, 0.25); }
 
 @media (prefers-reduced-motion: reduce) {
 	ul.topiclist li.row, .forum-image, .button, a.button, a.button1, a.button2,

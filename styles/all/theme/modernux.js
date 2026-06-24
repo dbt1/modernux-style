@@ -46,6 +46,21 @@
 		fn();
 	}
 
+	// True if an href points to the page we're currently on. Full-path compare so
+	// adm/index.php never collides with the board index; ACP/MCP are excluded.
+	function isActiveHref(href) {
+		if (!href || href.charAt(0) === '#') { return false; }
+		var path;
+		try { path = new URL(href, location.href).pathname; } catch (e) { return false; }
+		path = path.replace(/\/+$/, '');
+		if (/\/adm\//.test(path) || /\/mcp\.php$/.test(path)) { return false; }
+		var here = location.pathname.replace(/\/+$/, '');
+		// treat ".../" (board landing) and ".../index.php" as the same page
+		if (path.indexOf('.php') === -1) { path += '/index.php'; }
+		if (here.indexOf('.php') === -1) { here += '/index.php'; }
+		return path === here;
+	}
+
 	/* ---------------------------------------------------------- *
 	 * 1. Sticky/shrink header state + active section
 	 * ---------------------------------------------------------- */
@@ -54,14 +69,9 @@
 			document.body.classList.toggle('mux-scrolled', window.pageYOffset > 60);
 		});
 
-		var navItems = document.querySelectorAll('#nav-main > li > a[href]');
-		var here = location.pathname.split('/').pop() || 'index.php';
 		var best = null;
-		navItems.forEach(function (a) {
-			var href = a.getAttribute('href') || '';
-			if (href === '#' || href.charAt(0) === '#') { return; }
-			var file = href.split('?')[0].split('/').pop();
-			if (file && file === here) { best = a.parentNode; }
+		document.querySelectorAll('#nav-main > li > a[href]').forEach(function (a) {
+			if (isActiveHref(a.getAttribute('href'))) { best = a.parentNode; }
 		});
 		if (best) { best.classList.add('mux-active'); }
 	}
@@ -103,6 +113,7 @@
 		links.forEach(function (l) {
 			var a = el('a', { 'href': l.href });
 			a.textContent = l.label;
+			if (isActiveHref(l.href)) { a.classList.add('mux-active'); }
 			nav.appendChild(a);
 		});
 		drawer.appendChild(head);
@@ -208,7 +219,7 @@
 		var isTopic = !!document.querySelector('.post');
 		var bar = null;
 		if (isTopic) {
-			bar = el('div', { 'class': 'mux-progress', 'role': 'progressbar', 'aria-hidden': 'true' });
+			bar = el('div', { 'class': 'mux-progress', 'aria-hidden': 'true' });
 			document.body.appendChild(bar);
 		}
 
