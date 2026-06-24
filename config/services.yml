@@ -1,0 +1,11 @@
+services:
+    dbt.modernux.listener:
+        class: dbt\modernux\event\main_listener
+        arguments:
+            - '@config'
+            - '@request'
+            - '@user'
+            - '@path_helper'
+            - '@template'
+        tags:
+            - { name: event.listener }

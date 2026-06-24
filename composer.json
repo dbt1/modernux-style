@@ -1,0 +1,26 @@
+{
+	"name": "dbt/modernux",
+	"type": "phpbb-extension",
+	"description": "ModernUX – moderne, intuitive Navigation als Overlay für phpBB. Sticky/Shrink-Header, mobiler Off-Canvas-Drawer, Quick-Search-Overlay (Strg/⌘-K), Scroll-to-Top und Lesefortschritt. Behält die Akzentfarben des aktiven Styles (gebaut für Prosilver Dark Edition).",
+	"homepage": "https://github.com/dbt1/modernux-style",
+	"version": "0.1.0",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Thilo Graf",
+			"email": "dbt@novatux.de",
+			"homepage": "https://github.com/dbt1",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=7.2.0",
+		"composer/installers": "~1.0"
+	},
+	"extra": {
+		"display-name": "ModernUX Navigation",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.3.0,<4.0.0@dev"
+		}
+	}
+}

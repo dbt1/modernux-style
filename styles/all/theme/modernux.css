@@ -1,0 +1,293 @@
+/*!
+ * ModernUX – modern navigation overlay for phpBB (prosilver / Prosilver Dark Edition)
+ * @copyright (c) 2026 Thilo Graf (dbt1)
+ * @license GPL-2.0-only
+ *
+ * Progressive enhancement only: this stylesheet sits on top of the active style
+ * and reuses the Prosilver Dark Edition accent palette via custom properties.
+ * Nothing here is required for the page to work without JS.
+ */
+
+:root {
+	--mux-accent:  #D31141;   /* Prosilver Dark brand crimson (link hover / highlights) */
+	--mux-accent2: #BC2A4D;   /* secondary accent */
+	--mux-surface: #242a36;   /* panels / navbar / headerbar */
+	--mux-deep:    #171b24;   /* deepest background */
+	--mux-text:    #cccccc;   /* body text */
+	--mux-muted:   #838b98;   /* muted text */
+	--mux-line:    rgba(255, 255, 255, 0.10);
+	--mux-shadow:  0 6px 24px rgba(0, 0, 0, 0.45);
+	--mux-radius:  10px;
+	--mux-z-nav:        40;
+	--mux-z-totop:     900;
+	--mux-z-progress: 1200;
+	--mux-z-drawer:   1300;
+	--mux-z-search:   1400;
+	--mux-ease: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================ *
+ * 1. Sticky / shrinking navbar + active section
+ * ============================================================ */
+
+.navbar {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: var(--mux-z-nav);
+	transition: box-shadow var(--mux-ease), padding var(--mux-ease);
+}
+
+body.mux-scrolled .navbar {
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+	border-bottom: 2px solid var(--mux-accent);
+}
+
+/* Compact the big headerbar away while scrolling (it is above the sticky navbar). */
+.headerbar {
+	transition: padding var(--mux-ease);
+}
+body.mux-scrolled .headerbar {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+/* Highlight the nav item matching the current page. */
+#nav-main > li.mux-active > a {
+	color: #fff;
+	box-shadow: inset 0 -3px 0 var(--mux-accent);
+}
+
+/* ============================================================ *
+ * 2. Hamburger button + mobile off-canvas drawer
+ * ============================================================ */
+
+.mux-burger {
+	display: none;
+	-webkit-appearance: none;
+	appearance: none;
+	border: 0;
+	background: transparent;
+	color: var(--mux-text);
+	font-size: 1.4em;
+	line-height: 1;
+	padding: 8px 12px;
+	cursor: pointer;
+	border-radius: 6px;
+}
+.mux-burger:hover,
+.mux-burger:focus { color: #fff; background: rgba(255, 255, 255, 0.08); outline: none; }
+
+.mux-drawer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 84vw;
+	max-width: 320px;
+	background: var(--mux-surface);
+	color: var(--mux-text);
+	z-index: var(--mux-z-drawer);
+	box-shadow: var(--mux-shadow);
+	transform: translateX(-100%);
+	transition: transform var(--mux-ease);
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	display: flex;
+	flex-direction: column;
+}
+.mux-drawer.mux-open { transform: translateX(0); }
+
+.mux-drawer-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 16px;
+	border-bottom: 1px solid var(--mux-line);
+	font-weight: bold;
+	color: #fff;
+}
+.mux-drawer-close {
+	border: 0;
+	background: transparent;
+	color: var(--mux-text);
+	font-size: 1.5em;
+	line-height: 1;
+	cursor: pointer;
+	padding: 2px 8px;
+	border-radius: 6px;
+}
+.mux-drawer-close:hover,
+.mux-drawer-close:focus { color: #fff; background: rgba(255, 255, 255, 0.08); outline: none; }
+
+.mux-drawer nav { padding: 6px 0; }
+.mux-drawer a {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 13px 18px;
+	color: var(--mux-text);
+	text-decoration: none;
+	border-left: 3px solid transparent;
+	font-size: 1.05em;
+}
+.mux-drawer a:hover,
+.mux-drawer a:focus {
+	background: rgba(255, 255, 255, 0.06);
+	color: #fff;
+	border-left-color: var(--mux-accent);
+	outline: none;
+}
+
+.mux-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.55);
+	z-index: var(--mux-z-drawer);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity var(--mux-ease), visibility var(--mux-ease);
+}
+.mux-backdrop.mux-open { opacity: 1; visibility: visible; }
+.mux-drawer { z-index: calc(var(--mux-z-drawer) + 1); }
+
+/* Show the burger / hide the desktop linklist clutter below prosilver's breakpoint. */
+@media (max-width: 700px) {
+	.mux-burger { display: inline-flex; align-items: center; }
+}
+
+/* ============================================================ *
+ * 3. Quick-search overlay (Ctrl/⌘-K)
+ * ============================================================ */
+
+.mux-search {
+	position: fixed;
+	inset: 0;
+	z-index: var(--mux-z-search);
+	background: rgba(0, 0, 0, 0.6);
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	padding: 14vh 16px 16px;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity var(--mux-ease), visibility var(--mux-ease);
+}
+.mux-search.mux-open { opacity: 1; visibility: visible; }
+
+.mux-search-card {
+	width: 100%;
+	max-width: 560px;
+	background: var(--mux-deep);
+	border: 1px solid var(--mux-line);
+	border-top: 3px solid var(--mux-accent);
+	border-radius: var(--mux-radius);
+	box-shadow: var(--mux-shadow);
+	padding: 16px;
+	transform: translateY(-8px);
+	transition: transform var(--mux-ease);
+}
+.mux-search.mux-open .mux-search-card { transform: translateY(0); }
+
+.mux-search-card label {
+	display: block;
+	color: var(--mux-muted);
+	font-size: 0.85em;
+	margin-bottom: 6px;
+}
+.mux-search-row { display: flex; gap: 8px; }
+.mux-search-card input[type="search"] {
+	flex: 1;
+	background: var(--mux-surface);
+	color: #fff;
+	border: 1px solid var(--mux-line);
+	border-radius: 8px;
+	padding: 12px 14px;
+	font-size: 1.1em;
+}
+.mux-search-card input[type="search"]:focus {
+	outline: none;
+	border-color: var(--mux-accent);
+	box-shadow: 0 0 0 2px rgba(211, 17, 65, 0.35);
+}
+.mux-search-card button {
+	border: 0;
+	background: var(--mux-accent);
+	color: #fff;
+	font-weight: bold;
+	padding: 0 18px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+.mux-search-card button:hover { background: var(--mux-accent2); }
+.mux-search-hint { margin-top: 10px; color: var(--mux-muted); font-size: 0.8em; }
+.mux-kbd {
+	display: inline-block;
+	border: 1px solid var(--mux-line);
+	border-radius: 4px;
+	padding: 0 6px;
+	font-family: monospace;
+	background: var(--mux-surface);
+}
+
+/* ============================================================ *
+ * 4. Scroll-to-top + reading progress
+ * ============================================================ */
+
+.mux-progress {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 3px;
+	width: 0;
+	background: var(--mux-accent);
+	z-index: var(--mux-z-progress);
+	transition: width 80ms linear;
+	pointer-events: none;
+}
+
+.mux-totop {
+	position: fixed;
+	right: 18px;
+	bottom: 18px;
+	width: 44px;
+	height: 44px;
+	border: 1px solid var(--mux-line);
+	border-radius: 50%;
+	background: var(--mux-surface);
+	color: var(--mux-text);
+	font-size: 1.2em;
+	line-height: 1;
+	cursor: pointer;
+	z-index: var(--mux-z-totop);
+	box-shadow: var(--mux-shadow);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(8px);
+	transition: opacity var(--mux-ease), visibility var(--mux-ease), transform var(--mux-ease), background var(--mux-ease);
+}
+.mux-totop.mux-show { opacity: 1; visibility: visible; transform: translateY(0); }
+.mux-totop:hover,
+.mux-totop:focus { background: var(--mux-accent); color: #fff; outline: none; }
+
+/* ============================================================ *
+ * Accessibility / motion
+ * ============================================================ */
+
+.mux-sr-only {
+	position: absolute !important;
+	width: 1px; height: 1px;
+	padding: 0; margin: -1px;
+	overflow: hidden; clip: rect(0, 0, 0, 0);
+	white-space: nowrap; border: 0;
+}
+
+body.mux-noscroll { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+	.navbar, .headerbar, .mux-drawer, .mux-backdrop, .mux-search,
+	.mux-search-card, .mux-totop, .mux-progress {
+		transition: none !important;
+	}
+	html { scroll-behavior: auto !important; }
+}
