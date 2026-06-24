@@ -29,7 +29,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class main_listener implements EventSubscriberInterface
 {
 	/** Bump when the CSS/JS assets change (cache-buster, independent of the style version). */
-	const ASSET_VERSION = '0.3.0';
+	const ASSET_VERSION = '0.4.0';
 
 	/** @var config */
 	protected $config;

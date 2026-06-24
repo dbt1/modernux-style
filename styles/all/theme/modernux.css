@@ -12,6 +12,7 @@
 	--mux-accent:  #D31141;   /* Prosilver Dark brand crimson (link hover / highlights) */
 	--mux-accent2: #BC2A4D;   /* secondary accent */
 	--mux-surface: #242a36;   /* panels / navbar / headerbar */
+	--mux-surface-2: #2d3543; /* button/hover surface (a touch lighter) */
 	--mux-deep:    #171b24;   /* deepest background */
 	--mux-text:    #cccccc;   /* body text */
 	--mux-muted:   #838b98;   /* muted text */
@@ -323,7 +324,7 @@ ul.topiclist li.header dt .list-inner,
 ul.topiclist li.header dd {
 	text-transform: uppercase;
 	font-weight: 600;
-	font-size: .82em;
+	font-size: 1.05em;
 	letter-spacing: .06em;
 }
 
@@ -361,74 +362,110 @@ dl.row-item dd.topics {
 }
 
 /* Last-post block: muted meta, stronger subject (scan hierarchy) */
-dd.lastpost { font-size: .85em; line-height: 1.4; }
+dd.lastpost { font-size: .92em; line-height: 1.4; }
 dd.lastpost a.lastsubject { color: var(--mux-text); font-weight: 500; }
 
 /* Forum icon polish (don't replace the sprite, just animate gently) */
 .forum-image { transition: transform var(--mux-ease); }
 li.row:hover .forum-image { transform: scale(1.03); }
 
-/* --- "Jump to last post": bigger accent icon (baseline) + round pill (:has) --- */
+/* --- "Jump to last post": consistent accent pill (JS-tagged .mux-jump) --- */
 dd.lastpost a .icon.fa-external-link-square {
-	font-size: 1.25em;
-	color: var(--mux-accent) !important;
+	color: var(--mux-accent) !important;   /* baseline (no-JS): icon stays on-brand */
 }
-dd.lastpost a:has(> .fa-external-link-square) {
+dd.lastpost a.mux-jump {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 32px;
-	height: 32px;
-	border-radius: 50%;
+	padding: 3px 11px;
+	margin-left: 4px;
+	border-radius: 999px;
 	background: var(--mux-surface);
 	border: 1px solid var(--mux-line);
+	line-height: 1;
 	vertical-align: middle;
-	transition: background var(--mux-ease), transform var(--mux-ease);
+	transition: background var(--mux-ease), border-color var(--mux-ease);
 }
-dd.lastpost a:has(> .fa-external-link-square):hover {
+dd.lastpost a.mux-jump .icon.fa-external-link-square { font-size: 1em; }
+dd.lastpost a.mux-jump:hover {
 	background: var(--mux-accent);
-	transform: translateY(-1px);
+	border-color: var(--mux-accent);
 }
-dd.lastpost a:has(> .fa-external-link-square):hover .icon.fa-external-link-square {
-	color: #fff !important;
-}
+dd.lastpost a.mux-jump:hover .icon.fa-external-link-square { color: #fff !important; }
 
-/* --- Buttons as modern pills --- */
+/* --- Buttons: GitHub-style toolbar (subtle default, accent primary) --- */
 .button,
 a.button, a.button1, a.button2,
 input.button1, input.button2, input.button3,
 .button-search, .button-search-end {
-	border-radius: var(--mux-radius-md) !important;
-	transition: background var(--mux-ease), border-color var(--mux-ease),
-		transform var(--mux-ease), box-shadow var(--mux-ease);
+	border-radius: var(--mux-radius-sm) !important;
+	transition: background var(--mux-ease), border-color var(--mux-ease), color var(--mux-ease);
+}
+/* Default = surface + border + readable text; quiet hover (no bounce) */
+.button,
+a.button, a.button2,
+input.button2, input.button3,
+.button-search-end {
+	background: var(--mux-surface) !important;
+	border: 1px solid var(--mux-line) !important;
+	color: var(--mux-text) !important;
+	font-weight: 500;
 }
 .button:hover,
-a.button:hover, a.button1:hover, a.button2:hover,
-input.button1:hover, input.button2:hover { transform: translateY(-1px); }
-
+a.button:hover, a.button2:hover,
+input.button2:hover, input.button3:hover,
+.button-search-end:hover {
+	background: var(--mux-surface-2) !important;
+	border-color: rgba(255, 255, 255, 0.22) !important;
+	color: #fff !important;
+}
 /* Primary actions = accent fill */
 a.button1, input.button1,
 button.button-search, .button-search {
 	background: var(--mux-accent) !important;
-	border-color: var(--mux-accent) !important;
+	border: 1px solid var(--mux-accent) !important;
 	color: #fff !important;
+	font-weight: 600;
 }
 a.button1:hover, input.button1:hover,
 button.button-search:hover, .button-search:hover {
 	background: var(--mux-accent2) !important;
 	border-color: var(--mux-accent2) !important;
 }
-/* Secondary = surface + accent edge on hover */
-a.button2:hover, input.button2:hover { border-color: var(--mux-accent) !important; color: #fff !important; }
 
-/* Header search field: rounded ends + scoped focus ring (mirrors Ctrl-K) */
-#search-box .inputbox { border-radius: var(--mux-radius-md) 0 0 var(--mux-radius-md); }
+/* Header search field: GitHub-ish input + scoped focus ring (mirrors Ctrl-K) */
+#search-box .inputbox {
+	background: var(--mux-surface) !important;
+	border: 1px solid var(--mux-line);
+	border-radius: var(--mux-radius-sm) 0 0 var(--mux-radius-sm);
+}
 #search-box .button-search { border-radius: 0 !important; }
-#search-box .button-search-end { border-radius: 0 var(--mux-radius-md) var(--mux-radius-md) 0 !important; }
+#search-box .button-search-end { border-radius: 0 var(--mux-radius-sm) var(--mux-radius-sm) 0 !important; }
 #search-box .inputbox:focus {
 	outline: none;
 	border-color: var(--mux-accent);
 	box-shadow: 0 0 0 2px rgba(211, 17, 65, 0.30);
+}
+
+/* --- Dropdown menus (Schnellzugriff & co.): GitHub-style cards --- */
+.dropdown .dropdown-contents {
+	background: var(--mux-surface) !important;
+	border: 1px solid var(--mux-line) !important;
+	border-radius: var(--mux-radius-md);
+	box-shadow: var(--mux-shadow);
+	padding: 5px;
+}
+.dropdown .dropdown-contents > li > a {
+	border-radius: var(--mux-radius-sm);
+	transition: background var(--mux-ease), color var(--mux-ease);
+}
+.dropdown .dropdown-contents > li > a:hover {
+	background: var(--mux-hover);
+	color: #fff;
+}
+.dropdown .dropdown-contents li.separator {
+	border-top: 1px solid var(--mux-line);
+	margin: 4px 2px;
 }
 
 /* --- Navbar polish: brand accent line + hover pills --- */

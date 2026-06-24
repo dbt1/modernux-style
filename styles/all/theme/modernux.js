@@ -248,11 +248,23 @@
 		}
 	}
 
+	/* ---------------------------------------------------------- *
+	 * 6. Tag the "jump to last post" links so they style as a
+	 *    consistent pill regardless of surrounding markup/:has()
+	 * ---------------------------------------------------------- */
+	function initLastPostPills() {
+		document.querySelectorAll('dd.lastpost .icon.fa-external-link-square').forEach(function (i) {
+			var a = i.closest('a');
+			if (a) { a.classList.add('mux-jump'); }
+		});
+	}
+
 	ready(function () {
 		try { initStickyHeader(); } catch (e) {}
 		try { initDrawer(); } catch (e) {}
 		try { initQuickSearch(); } catch (e) {}
 		try { initScrollAids(); } catch (e) {}
 		try { initFooterCredit(); } catch (e) {}
+		try { initLastPostPills(); } catch (e) {}
 	});
 })();
